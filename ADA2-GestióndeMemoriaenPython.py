@@ -19,9 +19,12 @@ frutas.append("Mango")
 frutas.append("Manzana")
 frutas.append("Banana")
 frutas.append("Uvas")
+frutas.append(3)
 
 print(frutas)
 
+elemento = frutas[2] * frutas[4]
+print("La multiplicación es:", elemento)
 
 frutas.pop(0)  
 frutas.pop(1)  
