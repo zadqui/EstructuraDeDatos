@@ -1,0 +1,45 @@
+class Cola:
+    def __init__(self):
+        self.items = []
+
+    def esta_vacia(self):
+        return len(self.items) == 0
+
+    def encolar(self, item):
+        self.items.append(item)
+
+    def desencolar(self):
+        if not self.esta_vacia():
+            return self.items.pop(0)
+        return None
+
+    def __str__(self):
+        return str(self.items)
+
+
+def sumar_colas(cola_a, cola_b):
+    cola_resultado = Cola()
+
+    while not cola_a.esta_vacia() and not cola_b.esta_vacia():
+        a = cola_a.desencolar()
+        b = cola_b.desencolar()
+        cola_resultado.encolar(a + b)
+
+    return cola_resultado
+
+
+# Ejemplo de prueba
+cola_a = Cola()
+cola_b = Cola()
+
+for n in [3, 4, 2, 8, 12]:
+    cola_a.encolar(n)
+
+for n in [6, 2, 9, 11, 3]:
+    cola_b.encolar(n)
+
+cola_resultado = sumar_colas(cola_a, cola_b)
+
+print("Cola A:", cola_a)
+print("Cola B:", cola_b)
+print("Cola Resultado:", cola_resultado)
