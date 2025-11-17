@@ -1,0 +1,43 @@
+¿Cómo funciona?
+1. Inicialización:
+pythondist = {nodo: float('inf') for nodo in grafo}
+dist[inicio] = 0
+visitados = set()
+
+Crea un diccionario dist donde cada nodo comienza con distancia infinita
+El nodo inicial tiene distancia 0
+visitados guarda los nodos ya procesados
+
+2. Bucle principal:
+pythonwhile len(visitados) < len(grafo):
+Continúa hasta que todos los nodos estén visitados
+3. Seleccionar el nodo más cercano:
+pythonnodo_actual = None
+for nodo in grafo:
+    if nodo not in visitados:
+        if nodo_actual is None or dist[nodo] < dist[nodo_actual]:
+            nodo_actual = nodo
+Encuentra el nodo no visitado con la menor distancia conocida
+4. Actualizar distancias:
+pythonfor vecino, peso in grafo[nodo_actual].items():
+    nueva_dist = dist[nodo_actual] + peso
+    if nueva_dist < dist[vecino]:
+        dist[vecino] = nueva_dist
+```
+Para cada vecino del nodo actual, calcula si hay un camino más corto pasando por el nodo actual
+
+## Ejemplo con tu grafo:
+```
+A --4--> B --5--> D
+|       ↑
+2       1
+|       |
+└----> C --8--> D
+Resultado: {'A': 0, 'B': 3, 'C': 2, 'D': 8}
+
+A → A: distancia 0 (es el inicio)
+A → B: distancia 3 (A → C → B = 2 + 1)
+A → C: distancia 2 (A → C = 2)
+A → D: distancia 8 (A → B → D = 3 + 5)
+
+El algoritmo encuentra que ir de A a B pasando por C (distancia 3) es más corto que ir directo (distancia 4).ReintentarClaude puede cometer errores. Verifique las respuestas.
