@@ -1,0 +1,85 @@
+Este código implementa el algoritmo de Kruskal, que encuentra el Árbol de Expansión Mínima (MST - Minimum Spanning Tree) de un grafo. Es decir, conecta todos los nodos usando el menor peso total posible, sin formar ciclos.
+¿Cómo funciona?
+1. Estructura Union-Find (Disjoint Set)
+pythondef find(padre, nodo):
+    if padre[nodo] != nodo:
+        padre[nodo] = find(padre, padre[nodo])  # Compresión de camino
+    return padre[nodo]
+
+Encuentra el representante (raíz) del conjunto al que pertenece un nodo
+Compresión de camino: optimización que aplana la estructura para búsquedas más rápidas
+
+pythondef union(padre, rango, a, b):
+    ra = find(padre, a)
+    rb = find(padre, b)
+    if ra != rb:
+        # Union por rango: el árbol más pequeño se une al más grande
+        if rango[ra] < rango[rb]:
+            padre[ra] = rb
+        elif rango[ra] > rango[rb]:
+            padre[rb] = ra
+        else:
+            padre[rb] = ra
+            rango[ra] += 1
+
+Une dos conjuntos (componentes conexas)
+Union por rango: mantiene los árboles balanceados para mejor eficiencia
+
+2. Algoritmo de Kruskal
+pythondef kruskal(nodos, aristas):
+    padre = {n: n for n in nodos}  # Cada nodo es su propio padre inicialmente
+    rango = {n: 0 for n in nodos}  # Rango inicial es 0
+    mst = []
+    aristas = sorted(aristas, key=lambda x: x[2])  # Ordenar por peso
+    
+    for u, v, peso in aristas:
+        if find(padre, u) != find(padre, v):  # Si no forman ciclo
+            union(padre, rango, u, v)          # Unir componentes
+            mst.append((u, v, peso))           # Agregar arista al MST
+    return mst
+```
+
+**Pasos:**
+1. Ordena las aristas de menor a mayor peso
+2. Para cada arista (en orden):
+   - Si conecta dos componentes diferentes → la agrega al MST
+   - Si crearía un ciclo (ambos nodos ya están conectados) → la descarta
+
+## Tu ejemplo:
+
+**Grafo inicial:**
+```
+A --1-- B
+|       |
+3       2
+|       |
+C ------+
+|
+4
+|
+D
+```
+
+**Aristas ordenadas por peso:**
+```
+1. (A, B, 1)
+2. (B, C, 2)
+3. (A, C, 3)
+4. (C, D, 4)
+Proceso:
+PasoArista¿Forma ciclo?MST1(A,B,1)No[(A,B,1)]2(B,C,2)No[(A,B,1), (B,C,2)]3(A,C,3)Sí (A y C ya conectados)Se descarta4(C,D,4)No[(A,B,1), (B,C,2), (C,D,4)]
+Resultado:
+python[('A', 'B', 1), ('B', 'C', 2), ('C', 'D', 4)]
+```
+
+**Árbol resultante:**
+```
+A --1-- B --2-- C --4-- D
+Peso total: 1 + 2 + 4 = 7 (mínimo posible)
+Usos prácticos:
+
+Redes eléctricas/telecomunicaciones: conectar todas las ciudades con el menor costo
+Diseño de circuitos: minimizar el cableado
+Clustering: agrupar datos similares
+
+Complejidad: O(E log E) donde E es el número de aristas (por el ordenamiento)

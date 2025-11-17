@@ -1,0 +1,60 @@
+Este código implementa el algoritmo de Warshall, que calcula la clausura transitiva de un grafo. Es decir, determina qué nodos son alcanzables desde otros nodos (directa o indirectamente).
+¿Cómo funciona?
+Diferencia con Floyd-Warshall:
+
+Floyd-Warshall: calcula distancias más cortas (usa sumas)
+Warshall: calcula alcanzabilidad (usa operadores lógicos OR y AND)
+
+Lógica del algoritmo:
+pythonfor k in range(n):      # Nodo intermedio
+    for i in range(n):  # Nodo origen
+        for j in range(n):  # Nodo destino
+            matriz[i][j] = matriz[i][j] or (matriz[i][k] and matriz[k][j])
+```
+
+Pregunta: **¿Puedo llegar de i a j?**
+- Sí, si ya existe una conexión directa: `matriz[i][j]`
+- **O** si puedo llegar de i a k **Y** de k a j: `matriz[i][k] and matriz[k][j]`
+
+## Tu ejemplo:
+
+**Matriz inicial (1 = hay camino directo, 0 = no hay camino):**
+```
+    0  1  2
+0: [1, 1, 0]  → Desde 0: puedo ir a 0 y a 1
+1: [0, 1, 1]  → Desde 1: puedo ir a 1 y a 2
+2: [0, 0, 1]  → Desde 2: solo puedo ir a 2
+```
+
+**Grafo:**
+```
+0 → 1 → 2
+↺   ↺   ↺
+```
+
+**Resultado después de Warshall:**
+```
+[1, 1, 1]
+[0, 1, 1]
+[0, 0, 1]
+Interpretación:
+
+Fila 0: [1, 1, 1] → Desde el nodo 0 puedo alcanzar los nodos 0, 1 y 2
+
+0 → 2 es alcanzable indirectamente: 0 → 1 → 2
+
+
+Fila 1: [0, 1, 1] → Desde el nodo 1 puedo alcanzar los nodos 1 y 2
+
+No puedo llegar al nodo 0
+
+
+Fila 2: [0, 0, 1] → Desde el nodo 2 solo puedo alcanzar al nodo 2 (sí mismo)
+
+Uso práctico:
+
+Redes sociales: ¿Qué usuarios están conectados transitivamente?
+Dependencias: Si A depende de B y B depende de C, entonces A depende de C
+Accesibilidad: ¿Desde qué ciudades puedo llegar a otras (con escalas)?
+
+Complejidad: O(n³), igual que Floyd-Warshall, pero trabaja con valores booleanos en lugar de distancias numéricas.

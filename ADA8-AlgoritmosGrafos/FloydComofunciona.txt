@@ -1,0 +1,54 @@
+Este código implementa el algoritmo de Floyd-Warshall, que encuentra las distancias más cortas entre todos los pares de nodos en un grafo ponderado.
+¿Cómo funciona?
+Diferencia clave con Dijkstra:
+
+Dijkstra: encuentra distancias desde UN nodo a todos los demás
+Floyd-Warshall: encuentra distancias entre TODOS los pares de nodos
+
+Lógica del algoritmo:
+pythonfor k in range(n):      # Nodo intermedio
+    for i in range(n):  # Nodo origen
+        for j in range(n):  # Nodo destino
+            if matriz[i][k] + matriz[k][j] < matriz[i][j]:
+                matriz[i][j] = matriz[i][k] + matriz[k][j]
+```
+
+Para cada nodo `k`, verifica si pasar por `k` hace el camino de `i` a `j` más corto:
+- **¿Es más corto ir de i → k → j que ir directamente de i → j?**
+- Si sí, actualiza la distancia
+
+## Tu ejemplo:
+
+**Matriz inicial (INF = 99999 representa "sin conexión"):**
+```
+    0    1    2    3
+0: [0,   3,   INF, 5]
+1: [2,   0,   INF, 4]
+2: [INF, 1,   0,   INF]
+3: [INF, INF, 2,   0]
+```
+
+**Resultado después de Floyd-Warshall:**
+```
+[0, 3, 7, 5]
+[2, 0, 6, 4]
+[3, 1, 0, 5]
+[5, 3, 2, 0]
+Interpretación:
+Por ejemplo, matriz[0][2] = 7 significa:
+
+La distancia más corta del nodo 0 al nodo 2 es 7
+Ruta óptima: 0 → 3 → 2 (5 + 2 = 7)
+
+Otro ejemplo, matriz[2][0] = 3:
+
+La distancia más corta del nodo 2 al nodo 0 es 3
+Ruta óptima: 2 → 1 → 0 (1 + 2 = 3)
+
+Ventajas:
+
+Calcula todas las distancias en una sola ejecución
+Funciona con pesos negativos (Dijkstra no)
+Código muy simple (3 bucles anidados)
+
+Complejidad: O(n³) - más lento que Dijkstra para un solo origen, pero más eficiente si necesitas todas las distancias.
